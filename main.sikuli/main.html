@@ -89,16 +89,20 @@
             <span class="kw">return</span> <span class="dig">0</span>
 
     <span class="kw">def</span> findAllElixir(self):
-        elixirs = r.findAll(<img src="1453455688110.png" />)
+        elixirsLv8 = r.findAll(<img src="1453455688110.png" />)
+        <span class="cmt"># elixirsLv9 = r.findAll()</span>
+        <span class="cmt"># eslixirsLv10 = r.findAll()</span>
         results = []
-        <span class="kw">for</span> e <span class="kw">in</span> elixirs:
+        <span class="kw">for</span> e <span class="kw">in</span> elixirsLv8:
             results.append((e.x, e.y))
         <span class="kw">return</span> results
 
     <span class="kw">def</span> findAllArcherTower(self):
-        towers = r.findAll(<img src="1453455834637.png" />)
+        <span class="cmt"># towersLv7 = r.findAll()</span>
+        towersLv8 = r.findAll(<img src="1453455834637.png" />)
+        <span class="cmt"># towersLv9 = r.findAll()</span>
         results = []
-        <span class="kw">for</span> t <span class="kw">in</span> towers:
+        <span class="kw">for</span> t <span class="kw">in</span> towersLv8:
             results.append((t.x, t.y))
         <span class="kw">return</span> results
 
@@ -238,7 +242,7 @@
     <span class="kw">if</span> r.exists(<img src="1453348472944.png" />):
         r.<span class="skw">click</span>(<img src="1453348472944.png" />)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453356703238.png" />):
-        Debug.log(<span class="str">"COCO Started"</span>)
+        Debug.log(<span class="str">"COC Started"</span>)
 
         <span class="kw">return</span> True
     <span class="kw">else</span>:
@@ -267,7 +271,8 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    stealElixir()
+    <span class="cmt"># stealElixir()</span>
+    wander(collect)
     <span class="cmt"># if start():</span>
         <span class="cmt"># trainTroops()</span>
         <span class="cmt"># farm()  </span>

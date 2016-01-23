@@ -17,16 +17,20 @@ class Finder:
             return 0
 
     def findAllElixir(self):
-        elixirs = r.findAll("1453455688110.png")
+        elixirsLv8 = r.findAll("1453455688110.png")
+        # elixirsLv9 = r.findAll()
+        # eslixirsLv10 = r.findAll()
         results = []
-        for e in elixirs:
+        for e in elixirsLv8:
             results.append((e.x, e.y))
         return results
 
     def findAllArcherTower(self):
-        towers = r.findAll("1453455834637.png")
+        # towersLv7 = r.findAll()
+        towersLv8 = r.findAll("1453455834637.png")
+        # towersLv9 = r.findAll()
         results = []
-        for t in towers:
+        for t in towersLv8:
             results.append((t.x, t.y))  
         return results
 
@@ -166,7 +170,7 @@ def startCOC():
     if r.exists("1453348472944.png"):
         r.click("1453348472944.png")
     if r.wait("1453356703238.png"):
-        Debug.log("COCO Started")
+        Debug.log("COC Started")
 
         return True
     else: 
@@ -195,7 +199,8 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    stealElixir()
+    # stealElixir()
+    wander(collect)
     # if start():
         # trainTroops()
         # farm()  
