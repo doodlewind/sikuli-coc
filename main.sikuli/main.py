@@ -1,11 +1,10 @@
-# COC Auto Farm Script
+# C Auto Farm Script
 import time
 import math
-import struct
 
 
-class Finder:
-    
+class Finder:        
+        
     def findTownHall(self):
         if r.exists(Pattern("1453393835539.png").similar(0.85)):
             return 8
@@ -16,27 +15,39 @@ class Finder:
         else:
             return 0
 
-    def findAllElixir(self):
-        elixirsLv8 = r.findAll("1453455688110.png")
-        # elixirsLv9 = r.findAll()
-        # eslixirsLv10 = r.findAll()
+    def findBuilding(self, *args):
         results = []
-        for e in elixirsLv8:
-            results.append((e.x, e.y))
+        for building in args:
+            if building is not None:
+                for b in building:
+                    results.append((b.x, b.y))
         return results
+
+    def findAllGold(self):
+        # goldsLv9 = r.findAll("1453565509397.png")
+        goldsLv10Lv11 = r.findAll("1453566796795.png")
+        # goldsLv12 = r.findAll("1453565859031.png")
+        return f.findBuilding(goldsLv10Lv11)
+
+    def findAllElixir(self):
+        elixirsLv9 = r.findAll("1453566941841.png")
+        # elixirsLv10 = r.findAll("1453565377030.png")
+        elixirsLv11Lv12 = r.findAll("1453567004749.png")
+        return f.findBuilding(elixirsLv9, elixirsLv11Lv12)
+    
 
     def findAllArcherTower(self):
-        # towersLv7 = r.findAll()
-        towersLv8 = r.findAll("1453455834637.png")
-        # towersLv9 = r.findAll()
-        results = []
-        for t in towersLv8:
-            results.append((t.x, t.y))  
-        return results
+        towersLv7Lv8Lv9 = r.findAll("1453455834637.png")
+        towersLv10 = r.findAll("1453566337555.png")
+        return f.findBuilding(towersLv7Lv8Lv9, towersLv10)
+
+    def findAllWizardTower(self):
+        towersLv1Lv2Lv3Lv4Lv5 = r.findAll("1453567230793.png")
+        # towersLv6 = r.findAll("1453567557482.png")
+        return f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
-def stealElixir():
-    start = time.time()
+def steal():
     
     def distance(p1, p2):
         return math.sqrt( math.pow(p2[0] - p1[0], 2) + math.pow(p2[1] - p1[1], 2) )
@@ -57,22 +68,33 @@ def stealElixir():
         else:
             return False
 
+    start = time.time()
     elixirPoints = f.findAllElixir()
-    archerTowerPoints = f.findAllArcherTower()
+    Debug.log("Time for elixir: " + str(time.time() - start))
+
+    start = time.time()
+    goldPoints = f.findAllGold()
+    Debug.log("Time for gold: " + str(time.time() - start))
     
-    for e in elixirPoints:
+    targetPoints = elixirPoints + goldPoints
+
+    start = time.time()
+    archerTowerPoints = f.findAllArcherTower()
+    Debug.log("Time for archer tower: " + str(time.time() - start))
+    
+    start = time.time()
+    wizardTowerPoints = f.findAllWizardTower()
+    Debug.log("Time for wizard tower: " + str(time.time() - start))
+    
+    threatPoints = archerTowerPoints + wizardTowerPoints 
+    for t in targetPoints:
         # if it's safe to steal
         # analyse() will return the location to put archer
-        stealPoint = analyse(e, archerTowerPoints, 159)
+        stealPoint = analyse(t, threatPoints, 159)
         if stealPoint:
-            click(stealPoint)
-            print "elixir available"
-        else:
-            print "elixir not available"
+            r.click(stealPoint)
 
-    print "\ntime cost:", time.time() - start
 
-        
 def wander(callback):
     
     def myDragDrop(start, end):
@@ -127,24 +149,14 @@ def trainTroops():
     trainBar = Pattern("1453364606200.png") 
     archer = Pattern("1453459008655.png")
     Settings.MoveMouseDelay = 0.01
-    r.click(trainBar.targetOffset(140, 225))
-    for i in range(10):
-        r.click(archer)
-        
-    r.click(trainBar.targetOffset(200, 225))
-    for i in range(10):
-        r.click(archer)
-
-    r.click(trainBar.targetOffset(260, 225))
-    for i in range(10):
-        r.click(archer)
-
-    r.click(trainBar.targetOffset(320, 225))
-    for i in range(10):
-        r.click(archer)
-
+    
+    offsets = [(140, 225), (200, 225), (260, 225), (320, 225)]
+    for i in range(4):
+        o = offsets[i]
+        r.click(trainBar.targetOffset(o[0], o[1]))
+        for i in range(10):
+            r.click(archer)
     r.click("1453366780412.png")
-    return 
 
 
 def collect():
@@ -199,9 +211,8 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    # stealElixir()
-    wander(collect)
     # if start():
         # trainTroops()
-        # farm()  
+        # farm()
+        # wander(steal)
         # wander(collect)

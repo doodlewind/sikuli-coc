@@ -70,10 +70,9 @@
 <h2>main.sikuli</h2> <a href="main.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
-<span class="cmt"># COC Auto Farm Script</span>
+<span class="cmt"># C Auto Farm Script</span>
 <span class="kw">import</span> time
 <span class="kw">import</span> math
-<span class="kw">import</span> struct
 
 
 <span class="kw">class</span> Finder:
@@ -88,27 +87,39 @@
         <span class="kw">else</span>:
             <span class="kw">return</span> <span class="dig">0</span>
 
-    <span class="kw">def</span> findAllElixir(self):
-        elixirsLv8 = r.findAll(<img src="1453455688110.png" />)
-        <span class="cmt"># elixirsLv9 = r.findAll()</span>
-        <span class="cmt"># eslixirsLv10 = r.findAll()</span>
+    <span class="kw">def</span> findBuilding(self, *args):
         results = []
-        <span class="kw">for</span> e <span class="kw">in</span> elixirsLv8:
-            results.append((e.x, e.y))
+        <span class="kw">for</span> building <span class="kw">in</span> args:
+            <span class="kw">if</span> building <span class="kw">is</span> <span class="kw">not</span> None:
+                <span class="kw">for</span> b <span class="kw">in</span> building:
+                    results.append((b.x, b.y))
         <span class="kw">return</span> results
+
+    <span class="kw">def</span> findAllGold(self):
+        <span class="cmt"># goldsLv9 = r.findAll("1453565509397.png")</span>
+        goldsLv10Lv11 = r.findAll(<img src="1453566796795.png" />)
+        <span class="cmt"># goldsLv12 = r.findAll("1453565859031.png")</span>
+        <span class="kw">return</span> f.findBuilding(goldsLv10Lv11)
+
+    <span class="kw">def</span> findAllElixir(self):
+        elixirsLv9 = r.findAll(<img src="1453566941841.png" />)
+        <span class="cmt"># elixirsLv10 = r.findAll("1453565377030.png")</span>
+        elixirsLv11Lv12 = r.findAll(<img src="1453567004749.png" />)
+        <span class="kw">return</span> f.findBuilding(elixirsLv9, elixirsLv11Lv12)
+
 
     <span class="kw">def</span> findAllArcherTower(self):
-        <span class="cmt"># towersLv7 = r.findAll()</span>
-        towersLv8 = r.findAll(<img src="1453455834637.png" />)
-        <span class="cmt"># towersLv9 = r.findAll()</span>
-        results = []
-        <span class="kw">for</span> t <span class="kw">in</span> towersLv8:
-            results.append((t.x, t.y))
-        <span class="kw">return</span> results
+        towersLv7Lv8Lv9 = r.findAll(<img src="1453455834637.png" />)
+        towersLv10 = r.findAll(<img src="1453566337555.png" />)
+        <span class="kw">return</span> f.findBuilding(towersLv7Lv8Lv9, towersLv10)
+
+    <span class="kw">def</span> findAllWizardTower(self):
+        towersLv1Lv2Lv3Lv4Lv5 = r.findAll(<img src="1453567230793.png" />)
+        <span class="cmt"># towersLv6 = r.findAll("1453567557482.png")</span>
+        <span class="kw">return</span> f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
-<span class="kw">def</span> stealElixir():
-    start = time.time()
+<span class="kw">def</span> steal():
 
     <span class="kw">def</span> distance(p1, p2):
         <span class="kw">return</span> math.sqrt( math.pow(p2[<span class="dig">0</span>] - p1[<span class="dig">0</span>], <span class="dig">2</span>) + math.pow(p2[<span class="dig">1</span>] - p1[<span class="dig">1</span>], <span class="dig">2</span>) )
@@ -129,20 +140,31 @@
         <span class="kw">else</span>:
             <span class="kw">return</span> False
 
+    start = time.time()
     elixirPoints = f.findAllElixir()
-    archerTowerPoints = f.findAllArcherTower()
+    Debug.log(<span class="str">"Time for elixir: "</span> + str(time.time() - start))
 
-    <span class="kw">for</span> e <span class="kw">in</span> elixirPoints:
+    start = time.time()
+    goldPoints = f.findAllGold()
+    Debug.log(<span class="str">"Time for gold: "</span> + str(time.time() - start))
+
+    targetPoints = elixirPoints + goldPoints
+
+    start = time.time()
+    archerTowerPoints = f.findAllArcherTower()
+    Debug.log(<span class="str">"Time for archer tower: "</span> + str(time.time() - start))
+
+    start = time.time()
+    wizardTowerPoints = f.findAllWizardTower()
+    Debug.log(<span class="str">"Time for wizard tower: "</span> + str(time.time() - start))
+
+    threatPoints = archerTowerPoints + wizardTowerPoints
+    <span class="kw">for</span> t <span class="kw">in</span> targetPoints:
         <span class="cmt"># if it's safe to steal</span>
         <span class="cmt"># analyse() will return the location to put archer</span>
-        stealPoint = analyse(e, archerTowerPoints, <span class="dig">159</span>)
+        stealPoint = analyse(t, threatPoints, <span class="dig">159</span>)
         <span class="kw">if</span> stealPoint:
-            <span class="skw">click</span>(stealPoint)
-            <span class="kw">print</span> <span class="str">"elixir available"</span>
-        <span class="kw">else</span>:
-            <span class="kw">print</span> <span class="str">"elixir not available"</span>
-
-    <span class="kw">print</span> <span class="str">"\ntime cost:"</span>, time.time() - start
+            r.<span class="skw">click</span>(stealPoint)
 
 
 <span class="kw">def</span> wander(callback):
@@ -199,24 +221,14 @@
     trainBar = Pattern(<img src="1453364606200.png" />)
     archer = Pattern(<img src="1453459008655.png" />)
     Settings.MoveMouseDelay = <span class="dig">0.01</span>
-    r.<span class="skw">click</span>(trainBar.targetOffset(<span class="dig">140</span>, <span class="dig">225</span>))
-    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">10</span>):
-        r.<span class="skw">click</span>(archer)
 
-    r.<span class="skw">click</span>(trainBar.targetOffset(<span class="dig">200</span>, <span class="dig">225</span>))
-    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">10</span>):
-        r.<span class="skw">click</span>(archer)
-
-    r.<span class="skw">click</span>(trainBar.targetOffset(<span class="dig">260</span>, <span class="dig">225</span>))
-    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">10</span>):
-        r.<span class="skw">click</span>(archer)
-
-    r.<span class="skw">click</span>(trainBar.targetOffset(<span class="dig">320</span>, <span class="dig">225</span>))
-    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">10</span>):
-        r.<span class="skw">click</span>(archer)
-
+    offsets = [(<span class="dig">140</span>, <span class="dig">225</span>), (<span class="dig">200</span>, <span class="dig">225</span>), (<span class="dig">260</span>, <span class="dig">225</span>), (<span class="dig">320</span>, <span class="dig">225</span>)]
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">4</span>):
+        o = offsets[i]
+        r.<span class="skw">click</span>(trainBar.targetOffset(o[<span class="dig">0</span>], o[<span class="dig">1</span>]))
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">10</span>):
+            r.<span class="skw">click</span>(archer)
     r.<span class="skw">click</span>(<img src="1453366780412.png" />)
-    <span class="kw">return</span>
 
 
 <span class="kw">def</span> collect():
@@ -271,11 +283,10 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    <span class="cmt"># stealElixir()</span>
-    wander(collect)
     <span class="cmt"># if start():</span>
         <span class="cmt"># trainTroops()</span>
-        <span class="cmt"># farm()  </span>
+        <span class="cmt"># farm()</span>
+        <span class="cmt"># wander(steal)</span>
         <span class="cmt"># wander(collect)</span>
 
 </pre>
