@@ -135,7 +135,7 @@
     <span class="kw">def</span> analyse(point, threats, threshold):
         minThreat = minDistancePoint(point, threats)
         <span class="kw">if</span> minThreat <span class="kw">is</span> None:
-            <span class="kw">return</span> Location(r.getX() - <span class="dig">120</span>, r.getY() - <span class="dig">120</span>)
+            <span class="kw">return</span> Location(r.getX() - <span class="dig">20</span>, r.getY() - <span class="dig">20</span>)
 
         <span class="kw">if</span> distance(point, minThreat) &gt; threshold:
             dx = minThreat[<span class="dig">0</span>] - point[<span class="dig">0</span>]
@@ -148,7 +148,7 @@
         <span class="kw">else</span>:
             <span class="kw">return</span> False
 
-    <span class="kw">def</span> stealHownHall():
+    <span class="kw">def</span> stealTownHall():
         clickFlag = False
         thPoint = f.findTownHall()
         <span class="kw">if</span> thPoint <span class="kw">is</span> <span class="kw">not</span> None:
@@ -181,6 +181,8 @@
 
     targetPoints = elixirPoints + goldPoints
 
+
+
     <span class="cmt"># start = time.time()</span>
     <span class="cmt"># archerTowerPoints = f.findAllArcherTower()</span>
     <span class="cmt"># Debug.log("Time for archer tower: " + str(time.time() - start))</span>
@@ -190,17 +192,16 @@
     <span class="cmt"># Debug.log("Time for wizard tower: " + str(time.time() - start))</span>
 
     <span class="cmt"># threatPoints = archerTowerPoints + wizardTowerPoints</span>
-    threatPoints = []
+    <span class="cmt"># threatPoints = []</span>
 
-    <span class="kw">for</span> t <span class="kw">in</span> targetPoints:
-        Debug.log(str(time.time()))
+    <span class="cmt"># for t in targetPoints:</span>
         <span class="cmt"># if it's safe to steal</span>
         <span class="cmt"># analyse() will return the location to put archer</span>
-        stealPoint = analyse(t, threatPoints, <span class="dig">165</span>)
-        <span class="kw">if</span> stealPoint:
-            clickFlag = True
-            r.<span class="skw">click</span>(<img src="1453706733808.png" />)
-            r.<span class="skw">click</span>(stealPoint)
+    <span class="cmt">#     stealPoint = analyse(t, threatPoints, 165)</span>
+    <span class="cmt">#     if stealPoint:</span>
+    <span class="cmt">#         clickFlag = True</span>
+    <span class="cmt">#         r.click("1453706733808.png")</span>
+    <span class="cmt">#         r.click(stealPoint)</span>
 
     <span class="cmt"># stealTownHall(threatPoints) </span>
     <span class="kw">return</span> clickFlag
@@ -224,22 +225,22 @@
     <span class="cmt"># go top</span>
     end = start.above(<span class="dig">190</span>).left(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback()
+    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'UP'</span>)
 
     <span class="cmt"># go right</span>
     end = start.above(<span class="dig">280</span>).left(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback()
+    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'RIGHT'</span>)
 
     <span class="cmt"># go down</span>
-    <span class="cmt"># end = start.above(280).right(500)</span>
-    <span class="cmt"># myDragDrop(start, end)</span>
-    <span class="cmt"># clickFlag = clickFlag or callback()</span>
+    end = start.above(<span class="dig">280</span>).right(<span class="dig">500</span>)
+    myDragDrop(start, end)
+    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'DOWN'</span>)
 
     <span class="cmt"># go left</span>
-    <span class="cmt"># end = start.below(280).right(500)</span>
-    <span class="cmt"># myDragDrop(start, end)</span>
-    <span class="cmt"># clickFlag = clickFlag or callback()</span>
+    end = start.below(<span class="dig">280</span>).right(<span class="dig">500</span>)
+    myDragDrop(start, end)
+    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'LEFT'</span>)
 
     <span class="kw">return</span> clickFlag
 
@@ -253,6 +254,8 @@
     r.setAutoWaitTimeout(<span class="dig">5</span>)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453369288279.png" />):
         r.<span class="skw">click</span>(<img src="1453369288279.png" />)
+        <span class="kw">if</span> r.exists(<img src="1453716128302.png" />):
+            <span class="kw">return</span> False
     farmFlag = True
     farmOnce()
 
@@ -261,10 +264,12 @@
     r.setAutoWaitTimeout(<span class="dig">6</span>)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453369323452.png" />):
         wander(steal)
-        <span class="kw">if</span> r.exists(<img src="1453709602497.png" />):
-            r.<span class="skw">click</span>(<img src="1453709618877.png" />)
+        Debug.log(<span class="str">"WANDER Done"</span>)
+        r.<span class="skw">click</span>(<img src="1453709602497.png" />)
+        r.<span class="skw">click</span>(<img src="1453709618877.png" />)
         r.<span class="skw">wait</span>(<img src="1453709641549.png" />)
         r.<span class="skw">click</span>(<img src="1453709641549.png" />)
+        Debug.log(<span class="str">"RETURN Done"</span>)
 
 
 <span class="kw">def</span> trainTroops(total):
@@ -283,7 +288,7 @@
     r.<span class="skw">click</span>(<img src="1453366780412.png" />)
 
 
-<span class="kw">def</span> collect():
+<span class="kw">def</span> collect(direction):
     clickFlag = False
     r.setAutoWaitTimeout(<span class="dig">0.1</span>)
     golds = r.findAll(<img src="1453371882963.png" />)

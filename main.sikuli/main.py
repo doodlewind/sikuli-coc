@@ -63,7 +63,7 @@ def steal():
     def analyse(point, threats, threshold):
         minThreat = minDistancePoint(point, threats)
         if minThreat is None:
-            return Location(r.getX() - 120, r.getY() - 120)
+            return Location(r.getX() - 20, r.getY() - 20)
             
         if distance(point, minThreat) > threshold:
             dx = minThreat[0] - point[0]
@@ -76,7 +76,7 @@ def steal():
         else:
             return False
 
-    def stealHownHall():
+    def stealTownHall():
         clickFlag = False
         thPoint = f.findTownHall()
         if thPoint is not None:
@@ -109,6 +109,8 @@ def steal():
     
     targetPoints = elixirPoints + goldPoints
 
+    
+
     # start = time.time()
     # archerTowerPoints = f.findAllArcherTower()
     # Debug.log("Time for archer tower: " + str(time.time() - start))
@@ -118,17 +120,16 @@ def steal():
     # Debug.log("Time for wizard tower: " + str(time.time() - start))
     
     # threatPoints = archerTowerPoints + wizardTowerPoints
-    threatPoints = []
+    # threatPoints = []
     
-    for t in targetPoints:
-        Debug.log(str(time.time()))
+    # for t in targetPoints:
         # if it's safe to steal
         # analyse() will return the location to put archer
-        stealPoint = analyse(t, threatPoints, 165)
-        if stealPoint:
-            clickFlag = True
-            r.click("1453706733808.png")
-            r.click(stealPoint)
+    #     stealPoint = analyse(t, threatPoints, 165)
+    #     if stealPoint:
+    #         clickFlag = True
+    #         r.click("1453706733808.png")
+    #         r.click(stealPoint)
 
     # stealTownHall(threatPoints) 
     return clickFlag
@@ -152,22 +153,22 @@ def wander(callback):
     # go top
     end = start.above(190).left(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback()
+    clickFlag = clickFlag or callback('UP')
 
     # go right
     end = start.above(280).left(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback()
+    clickFlag = clickFlag or callback('RIGHT')
 
     # go down
-    # end = start.above(280).right(500)
-    # myDragDrop(start, end)
-    # clickFlag = clickFlag or callback()
+    end = start.above(280).right(500)
+    myDragDrop(start, end)
+    clickFlag = clickFlag or callback('DOWN')
 
     # go left
-    # end = start.below(280).right(500)
-    # myDragDrop(start, end)
-    # clickFlag = clickFlag or callback()
+    end = start.below(280).right(500)
+    myDragDrop(start, end)
+    clickFlag = clickFlag or callback('LEFT')
     
     return clickFlag
 
@@ -181,6 +182,8 @@ def farm():
     r.setAutoWaitTimeout(5)
     if r.wait("1453369288279.png"):
         r.click("1453369288279.png")
+        if r.exists("1453716128302.png"):
+            return False
     farmFlag = True
     farmOnce()
 
@@ -189,10 +192,12 @@ def farmOnce():
     r.setAutoWaitTimeout(6)
     if r.wait("1453369323452.png"):
         wander(steal)
-        if r.exists("1453709602497.png"):
-            r.click("1453709618877.png")
+        Debug.log("WANDER Done")
+        r.click("1453709602497.png")
+        r.click("1453709618877.png")
         r.wait("1453709641549.png")
         r.click("1453709641549.png")
+        Debug.log("RETURN Done")
 
 
 def trainTroops(total):
@@ -211,7 +216,7 @@ def trainTroops(total):
     r.click("1453366780412.png")
 
 
-def collect():
+def collect(direction):
     clickFlag = False
     r.setAutoWaitTimeout(0.1)
     golds = r.findAll("1453371882963.png")
