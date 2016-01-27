@@ -121,7 +121,7 @@
         <span class="kw">return</span> f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
-<span class="kw">def</span> steal():
+<span class="kw">def</span> steal(direction):
     clickFlag = False
 
     <span class="kw">def</span> distance(p1, p2):
@@ -147,6 +147,17 @@
             <span class="kw">return</span> Location(px, py)
         <span class="kw">else</span>:
             <span class="kw">return</span> False
+
+    <span class="kw">def</span> clickTarget(target, direction):
+        <span class="kw">if</span> direction == <span class="str">'UP'</span>:
+            <span class="kw">pass</span>
+        <span class="kw">elif</span> direction == <span class="str">'RIGHT'</span>:
+            <span class="kw">pass</span>
+        <span class="kw">elif</span> direction == <span class="str">'DOWN'</span>:
+            <span class="kw">pass</span>
+        <span class="kw">elif</span> direciton == <span class="str">'LEFT'</span>:
+            <span class="kw">pass</span>
+
 
     <span class="kw">def</span> stealTownHall():
         clickFlag = False
@@ -181,28 +192,15 @@
 
     targetPoints = elixirPoints + goldPoints
 
-
-
-    <span class="cmt"># start = time.time()</span>
-    <span class="cmt"># archerTowerPoints = f.findAllArcherTower()</span>
-    <span class="cmt"># Debug.log("Time for archer tower: " + str(time.time() - start))</span>
-
-    <span class="cmt"># start = time.time()</span>
-    <span class="cmt"># wizardTowerPoints = f.findAllWizardTower()</span>
-    <span class="cmt"># Debug.log("Time for wizard tower: " + str(time.time() - start))</span>
-
-    <span class="cmt"># threatPoints = archerTowerPoints + wizardTowerPoints</span>
-    <span class="cmt"># threatPoints = []</span>
-
+    <span class="kw">for</span> t <span class="kw">in</span> targetPoints:
+        clickTarget(t, direction)
+    <span class="cmt"># threatPoints = archerTowerPoints + wizardTowerPoints    </span>
     <span class="cmt"># for t in targetPoints:</span>
-        <span class="cmt"># if it's safe to steal</span>
-        <span class="cmt"># analyse() will return the location to put archer</span>
     <span class="cmt">#     stealPoint = analyse(t, threatPoints, 165)</span>
     <span class="cmt">#     if stealPoint:</span>
     <span class="cmt">#         clickFlag = True</span>
     <span class="cmt">#         r.click("1453706733808.png")</span>
     <span class="cmt">#         r.click(stealPoint)</span>
-
     <span class="cmt"># stealTownHall(threatPoints) </span>
     <span class="kw">return</span> clickFlag
 

@@ -49,7 +49,7 @@ class Finder:
         return f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
-def steal():
+def steal(direction):
     clickFlag = False
     
     def distance(p1, p2):
@@ -75,6 +75,17 @@ def steal():
             return Location(px, py)
         else:
             return False
+
+    def clickTarget(target, direction):
+        if direction == 'UP':
+            pass
+        elif direction == 'RIGHT':
+            pass
+        elif direction == 'DOWN':
+            pass
+        elif direciton == 'LEFT':
+            pass
+        
 
     def stealTownHall():
         clickFlag = False
@@ -109,28 +120,15 @@ def steal():
     
     targetPoints = elixirPoints + goldPoints
 
-    
-
-    # start = time.time()
-    # archerTowerPoints = f.findAllArcherTower()
-    # Debug.log("Time for archer tower: " + str(time.time() - start))
-    
-    # start = time.time()
-    # wizardTowerPoints = f.findAllWizardTower()
-    # Debug.log("Time for wizard tower: " + str(time.time() - start))
-    
-    # threatPoints = archerTowerPoints + wizardTowerPoints
-    # threatPoints = []
-    
+    for t in targetPoints:
+        clickTarget(t, direction)
+    # threatPoints = archerTowerPoints + wizardTowerPoints    
     # for t in targetPoints:
-        # if it's safe to steal
-        # analyse() will return the location to put archer
     #     stealPoint = analyse(t, threatPoints, 165)
     #     if stealPoint:
     #         clickFlag = True
     #         r.click("1453706733808.png")
     #         r.click(stealPoint)
-
     # stealTownHall(threatPoints) 
     return clickFlag
 
