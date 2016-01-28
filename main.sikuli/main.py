@@ -7,14 +7,12 @@ class Finder:
         
     def findTownHall(self):
         
-        townHallLv8 = r.find(Pattern("1453393835539.png").similar(0.85))
+        townHallLv8 = r.find("1453952397524.png")
         if townHallLv8 is not None:
             return (townHallLv8.getX(), townHallLv8.getY())
-
-        townHallLv7 = r.find(Pattern("1453708440856.png").similar(0.85))
+        townHallLv7 = r.find("1453952443462.png")
         if townHallLv7 is not None:
             return (townHallLv7.getX(), townHallLv7.getY()) 
-       
         return None
 
     def findBuilding(self, *args):
@@ -26,16 +24,17 @@ class Finder:
         return results
 
     def findAllGold(self):
-        # goldsLv9 = r.findAll("1453565509397.png")
-        goldsLv10Lv11 = r.findAll("1453566796795.png")
-        # goldsLv12 = r.findAll("1453565859031.png")
-        return f.findBuilding(goldsLv10Lv11)
+        # goldsLv9 = r.findAll("1453953124704.png")
+        goldsLv10Lv11 = r.findAll("1453953362202.png")
+        goldsLv12 = r.findAll("1453953394802.png")
+        return f.findBuilding(goldsLv10Lv11, goldsLv12)
 
     def findAllElixir(self):
-        elixirsLv9 = r.findAll("1453566941841.png")
-        # elixirsLv10 = r.findAll("1453565377030.png")
-        elixirsLv11Lv12 = r.findAll("1453567004749.png")
-        return f.findBuilding(elixirsLv9, elixirsLv11Lv12)
+        # elixirsLv8Lv9 = r.findAll("1453953091853.png")
+        # elixirsLv10 = r.findAll("1453953333748.png")
+        elixirsLv11Lv12 = r.findAll("1453953285030.png")
+        darkElixirs = r.findAll("1453996663798.png")
+        return f.findBuilding(elixirsLv11Lv12, darkElixirs)
     
 
     def findAllArcherTower(self):
@@ -45,7 +44,7 @@ class Finder:
 
     def findAllWizardTower(self):
         towersLv1Lv2Lv3Lv4Lv5 = r.findAll("1453567230793.png")
-        # towersLv6 = r.findAll("1453567557482.png")
+        towersLv6 = r.findAll("1453567557482.png")
         return f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
@@ -78,14 +77,14 @@ def steal(direction):
 
     def clickTarget(target, direction):
         if direction == 'UP':
-            pass
+            l = Location(target[0], target[1] - 120)
         elif direction == 'RIGHT':
-            pass
+            l = Location(target[0] + 120, target[1])
         elif direction == 'DOWN':
-            pass
-        elif direciton == 'LEFT':
-            pass
-        
+            l = Location(target[0], target[1] + 120)
+        else:
+            l = Location(target[0] - 120, target[1])
+        r.doubleClick(l)
 
     def stealTownHall():
         clickFlag = False
@@ -106,7 +105,7 @@ def steal(direction):
                     yOffset = 80
                 stealPoint = Location(thPoint[0] + xOffset, thPoint[1] + yOffset)
                 clickFlag = True
-                r.click("1453706733808.png")
+                r.click("1453952476599.png")
                 r.click(stealPoint)
             return clickFlag
 
@@ -121,6 +120,7 @@ def steal(direction):
     targetPoints = elixirPoints + goldPoints
 
     for t in targetPoints:
+        clickFlag = True
         clickTarget(t, direction)
     # threatPoints = archerTowerPoints + wizardTowerPoints    
     # for t in targetPoints:
@@ -133,8 +133,7 @@ def steal(direction):
     return clickFlag
 
 
-def wander(callback):
-    clickFlag = False
+def wander(act):
     
     def myDragDrop(start, end):
         Settings.MoveMouseDelay = 0.1
@@ -151,35 +150,33 @@ def wander(callback):
     # go top
     end = start.above(190).left(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback('UP')
+    act('UP')
 
     # go right
     end = start.above(280).left(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback('RIGHT')
+    act('RIGHT')
 
     # go down
     end = start.above(280).right(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback('DOWN')
+    act('DOWN')
 
     # go left
     end = start.below(280).right(500)
     myDragDrop(start, end)
-    clickFlag = clickFlag or callback('LEFT')
+    act('LEFT')
     
-    return clickFlag
 
-
-def nothing():
+def nothing(x):
     pass
 
 
 def farm():
-    r.click("1453368735143.png")
+    r.click("1453952516122.png")
     r.setAutoWaitTimeout(5)
-    if r.wait("1453369288279.png"):
-        r.click("1453369288279.png")
+    if r.wait("1453952530195.png"):
+        r.click("1453952530195.png")
         if r.exists("1453716128302.png"):
             return False
     farmFlag = True
@@ -199,9 +196,9 @@ def farmOnce():
 
 
 def trainTroops(total):
-    r.click("1453452912845.png")
-    trainBar = Pattern("1453364606200.png") 
-    archer = Pattern("1453459008655.png")
+    r.click("1453952569173.png")
+    trainBar = Pattern("1453952593719.png")
+    archer = Pattern("1453952623673.png")
     Settings.MoveMouseDelay = 0.01
     perBarack = total / 4
     
@@ -211,25 +208,25 @@ def trainTroops(total):
         r.click(trainBar.targetOffset(o[0], o[1]))
         for i in range(perBarack):
             r.click(archer)
-    r.click("1453366780412.png")
+    r.click("1453952643385.png")
 
 
 def collect(direction):
     clickFlag = False
     r.setAutoWaitTimeout(0.1)
-    golds = r.findAll("1453371882963.png")
+    golds = r.findAll("1453952674225.png")
     if golds:
        clickFlag = True
        for g in golds:
            r.click(g)
         
-    elixirs = r.findAll("1453371892290.png")
+    elixirs = r.findAll("1453952690966.png")
     if elixirs: 
         clickFlag = True
         for e in elixirs:
             r.click(e)
         
-    darkElixirs = r.findAll("1453371962628.png")
+    darkElixirs = r.findAll("1453952714596.png")
     if darkElixirs:
         clickFlag = True
         for d in darkElixirs:
@@ -256,7 +253,7 @@ def startCOC():
     r.setAutoWaitTimeout(2)
     if r.exists("1453348472944.png"):
         r.click("1453348472944.png")
-    if r.wait("1453356703238.png"):
+    if r.wait("1453952146233.png"):
         Debug.log("COC Started")
 
         return True
@@ -286,11 +283,10 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    if start():
-        farm()
-        # wander(collect)
+    # if start():
+        # farm()
+        # collect('CENTER')
+    wander(steal)
         # trainTroops()
-        # wander(steal)    
-    else:
-        popup("COC not started! Exit now.")
+    # popup("COC not started! Exit now.")
         

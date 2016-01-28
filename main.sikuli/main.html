@@ -79,14 +79,12 @@
 
     <span class="kw">def</span> findTownHall(self):
 
-        townHallLv8 = r.<span class="skw">find</span>(Pattern(<img src="1453393835539.png" />).similar(<span class="dig">0.85</span>))
+        townHallLv8 = r.<span class="skw">find</span>(<img src="1453952397524.png" />)
         <span class="kw">if</span> townHallLv8 <span class="kw">is</span> <span class="kw">not</span> None:
             <span class="kw">return</span> (townHallLv8.getX(), townHallLv8.getY())
-
-        townHallLv7 = r.<span class="skw">find</span>(Pattern(<img src="1453708440856.png" />).similar(<span class="dig">0.85</span>))
+        townHallLv7 = r.<span class="skw">find</span>(<img src="1453952443462.png" />)
         <span class="kw">if</span> townHallLv7 <span class="kw">is</span> <span class="kw">not</span> None:
             <span class="kw">return</span> (townHallLv7.getX(), townHallLv7.getY())
-
         <span class="kw">return</span> None
 
     <span class="kw">def</span> findBuilding(self, *args):
@@ -98,16 +96,17 @@
         <span class="kw">return</span> results
 
     <span class="kw">def</span> findAllGold(self):
-        <span class="cmt"># goldsLv9 = r.findAll("1453565509397.png")</span>
-        goldsLv10Lv11 = r.findAll(<img src="1453566796795.png" />)
-        <span class="cmt"># goldsLv12 = r.findAll("1453565859031.png")</span>
-        <span class="kw">return</span> f.findBuilding(goldsLv10Lv11)
+        <span class="cmt"># goldsLv9 = r.findAll("1453953124704.png")</span>
+        goldsLv10Lv11 = r.findAll(<img src="1453953362202.png" />)
+        goldsLv12 = r.findAll(<img src="1453953394802.png" />)
+        <span class="kw">return</span> f.findBuilding(goldsLv10Lv11, goldsLv12)
 
     <span class="kw">def</span> findAllElixir(self):
-        elixirsLv9 = r.findAll(<img src="1453566941841.png" />)
-        <span class="cmt"># elixirsLv10 = r.findAll("1453565377030.png")</span>
-        elixirsLv11Lv12 = r.findAll(<img src="1453567004749.png" />)
-        <span class="kw">return</span> f.findBuilding(elixirsLv9, elixirsLv11Lv12)
+        <span class="cmt"># elixirsLv8Lv9 = r.findAll("1453953091853.png")</span>
+        <span class="cmt"># elixirsLv10 = r.findAll("1453953333748.png")</span>
+        elixirsLv11Lv12 = r.findAll(<img src="1453953285030.png" />)
+        darkElixirs = r.findAll(<img src="1453996663798.png" />)
+        <span class="kw">return</span> f.findBuilding(elixirsLv11Lv12, darkElixirs)
 
 
     <span class="kw">def</span> findAllArcherTower(self):
@@ -117,7 +116,7 @@
 
     <span class="kw">def</span> findAllWizardTower(self):
         towersLv1Lv2Lv3Lv4Lv5 = r.findAll(<img src="1453567230793.png" />)
-        <span class="cmt"># towersLv6 = r.findAll("1453567557482.png")</span>
+        towersLv6 = r.findAll(<img src="1453567557482.png" />)
         <span class="kw">return</span> f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
@@ -150,14 +149,14 @@
 
     <span class="kw">def</span> clickTarget(target, direction):
         <span class="kw">if</span> direction == <span class="str">'UP'</span>:
-            <span class="kw">pass</span>
+            l = Location(target[<span class="dig">0</span>], target[<span class="dig">1</span>] - <span class="dig">120</span>)
         <span class="kw">elif</span> direction == <span class="str">'RIGHT'</span>:
-            <span class="kw">pass</span>
+            l = Location(target[<span class="dig">0</span>] + <span class="dig">120</span>, target[<span class="dig">1</span>])
         <span class="kw">elif</span> direction == <span class="str">'DOWN'</span>:
-            <span class="kw">pass</span>
-        <span class="kw">elif</span> direciton == <span class="str">'LEFT'</span>:
-            <span class="kw">pass</span>
-
+            l = Location(target[<span class="dig">0</span>], target[<span class="dig">1</span>] + <span class="dig">120</span>)
+        <span class="kw">else</span>:
+            l = Location(target[<span class="dig">0</span>] - <span class="dig">120</span>, target[<span class="dig">1</span>])
+        r.<span class="skw">doubleClick</span>(l)
 
     <span class="kw">def</span> stealTownHall():
         clickFlag = False
@@ -178,7 +177,7 @@
                     yOffset = <span class="dig">80</span>
                 stealPoint = Location(thPoint[<span class="dig">0</span>] + xOffset, thPoint[<span class="dig">1</span>] + yOffset)
                 clickFlag = True
-                r.<span class="skw">click</span>(<img src="1453706733808.png" />)
+                r.<span class="skw">click</span>(<img src="1453952476599.png" />)
                 r.<span class="skw">click</span>(stealPoint)
             <span class="kw">return</span> clickFlag
 
@@ -193,6 +192,7 @@
     targetPoints = elixirPoints + goldPoints
 
     <span class="kw">for</span> t <span class="kw">in</span> targetPoints:
+        clickFlag = True
         clickTarget(t, direction)
     <span class="cmt"># threatPoints = archerTowerPoints + wizardTowerPoints    </span>
     <span class="cmt"># for t in targetPoints:</span>
@@ -205,8 +205,7 @@
     <span class="kw">return</span> clickFlag
 
 
-<span class="kw">def</span> wander(callback):
-    clickFlag = False
+<span class="kw">def</span> wander(act):
 
     <span class="kw">def</span> myDragDrop(start, end):
         Settings.MoveMouseDelay = <span class="dig">0.1</span>
@@ -223,35 +222,33 @@
     <span class="cmt"># go top</span>
     end = start.above(<span class="dig">190</span>).left(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'UP'</span>)
+    act(<span class="str">'UP'</span>)
 
     <span class="cmt"># go right</span>
     end = start.above(<span class="dig">280</span>).left(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'RIGHT'</span>)
+    act(<span class="str">'RIGHT'</span>)
 
     <span class="cmt"># go down</span>
     end = start.above(<span class="dig">280</span>).right(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'DOWN'</span>)
+    act(<span class="str">'DOWN'</span>)
 
     <span class="cmt"># go left</span>
     end = start.below(<span class="dig">280</span>).right(<span class="dig">500</span>)
     myDragDrop(start, end)
-    clickFlag = clickFlag <span class="kw">or</span> callback(<span class="str">'LEFT'</span>)
-
-    <span class="kw">return</span> clickFlag
+    act(<span class="str">'LEFT'</span>)
 
 
-<span class="kw">def</span> nothing():
+<span class="kw">def</span> nothing(x):
     <span class="kw">pass</span>
 
 
 <span class="kw">def</span> farm():
-    r.<span class="skw">click</span>(<img src="1453368735143.png" />)
+    r.<span class="skw">click</span>(<img src="1453952516122.png" />)
     r.setAutoWaitTimeout(<span class="dig">5</span>)
-    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453369288279.png" />):
-        r.<span class="skw">click</span>(<img src="1453369288279.png" />)
+    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453952530195.png" />):
+        r.<span class="skw">click</span>(<img src="1453952530195.png" />)
         <span class="kw">if</span> r.exists(<img src="1453716128302.png" />):
             <span class="kw">return</span> False
     farmFlag = True
@@ -271,9 +268,9 @@
 
 
 <span class="kw">def</span> trainTroops(total):
-    r.<span class="skw">click</span>(<img src="1453452912845.png" />)
-    trainBar = Pattern(<img src="1453364606200.png" />)
-    archer = Pattern(<img src="1453459008655.png" />)
+    r.<span class="skw">click</span>(<img src="1453952569173.png" />)
+    trainBar = Pattern(<img src="1453952593719.png" />)
+    archer = Pattern(<img src="1453952623673.png" />)
     Settings.MoveMouseDelay = <span class="dig">0.01</span>
     perBarack = total / <span class="dig">4</span>
 
@@ -283,25 +280,25 @@
         r.<span class="skw">click</span>(trainBar.targetOffset(o[<span class="dig">0</span>], o[<span class="dig">1</span>]))
         <span class="kw">for</span> i <span class="kw">in</span> range(perBarack):
             r.<span class="skw">click</span>(archer)
-    r.<span class="skw">click</span>(<img src="1453366780412.png" />)
+    r.<span class="skw">click</span>(<img src="1453952643385.png" />)
 
 
 <span class="kw">def</span> collect(direction):
     clickFlag = False
     r.setAutoWaitTimeout(<span class="dig">0.1</span>)
-    golds = r.findAll(<img src="1453371882963.png" />)
+    golds = r.findAll(<img src="1453952674225.png" />)
     <span class="kw">if</span> golds:
        clickFlag = True
        <span class="kw">for</span> g <span class="kw">in</span> golds:
            r.<span class="skw">click</span>(g)
 
-    elixirs = r.findAll(<img src="1453371892290.png" />)
+    elixirs = r.findAll(<img src="1453952690966.png" />)
     <span class="kw">if</span> elixirs:
         clickFlag = True
         <span class="kw">for</span> e <span class="kw">in</span> elixirs:
             r.<span class="skw">click</span>(e)
 
-    darkElixirs = r.findAll(<img src="1453371962628.png" />)
+    darkElixirs = r.findAll(<img src="1453952714596.png" />)
     <span class="kw">if</span> darkElixirs:
         clickFlag = True
         <span class="kw">for</span> d <span class="kw">in</span> darkElixirs:
@@ -328,7 +325,7 @@
     r.setAutoWaitTimeout(<span class="dig">2</span>)
     <span class="kw">if</span> r.exists(<img src="1453348472944.png" />):
         r.<span class="skw">click</span>(<img src="1453348472944.png" />)
-    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453356703238.png" />):
+    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453952146233.png" />):
         Debug.log(<span class="str">"COC Started"</span>)
 
         <span class="kw">return</span> True
@@ -358,13 +355,13 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    <span class="kw">if</span> start():
-        farm()
-        <span class="cmt"># wander(collect)</span>
+    <span class="cmt"># if start():</span>
+        <span class="cmt"># farm()</span>
+        <span class="cmt"># collect('CENTER')</span>
+    wander(steal)
         <span class="cmt"># trainTroops()</span>
-        <span class="cmt"># wander(steal)    </span>
-    <span class="kw">else</span>:
-        <span class="skw">popup</span>(<span class="str">"COC not started! Exit now."</span>)
+    <span class="cmt"># popup("COC not started! Exit now.")</span>
+
 </pre>
 </body>
 </html>
