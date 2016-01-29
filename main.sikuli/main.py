@@ -173,21 +173,22 @@ def nothing(x):
 
 
 def farm():
-    r.click("1453952516122.png")
+    r.click("1453998706906.png")
     r.setAutoWaitTimeout(5)
-    if r.wait("1453952530195.png"):
-        r.click("1453952530195.png")
+    if r.wait("1453998721964.png"):
+        r.click("1453998721964.png")
         if r.exists("1453716128302.png"):
             return False
-    farmFlag = True
-    farmOnce()
+        farmOnce()
 
 
 def farmOnce():
     r.setAutoWaitTimeout(6)
-    if r.wait("1453369323452.png"):
+    if r.exists("1453998840504.png"):
         wander(steal)
-        Debug.log("WANDER Done")
+        Debug.log("FARM Done")
+        r.setAutoWaitTimeout(10)
+        r.wait(10)
         r.click("1453709602497.png")
         r.click("1453709618877.png")
         r.wait("1453709641549.png")
@@ -283,10 +284,11 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
+    farm()
     # if start():
         # farm()
         # collect('CENTER')
-    wander(steal)
-        # trainTroops()
+    # wander(steal)
+    
     # popup("COC not started! Exit now.")
         

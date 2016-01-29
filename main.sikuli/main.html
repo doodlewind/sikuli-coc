@@ -245,21 +245,22 @@
 
 
 <span class="kw">def</span> farm():
-    r.<span class="skw">click</span>(<img src="1453952516122.png" />)
+    r.<span class="skw">click</span>(<img src="1453998706906.png" />)
     r.setAutoWaitTimeout(<span class="dig">5</span>)
-    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453952530195.png" />):
-        r.<span class="skw">click</span>(<img src="1453952530195.png" />)
+    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453998721964.png" />):
+        r.<span class="skw">click</span>(<img src="1453998721964.png" />)
         <span class="kw">if</span> r.exists(<img src="1453716128302.png" />):
             <span class="kw">return</span> False
-    farmFlag = True
-    farmOnce()
+        farmOnce()
 
 
 <span class="kw">def</span> farmOnce():
     r.setAutoWaitTimeout(<span class="dig">6</span>)
-    <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453369323452.png" />):
+    <span class="kw">if</span> r.exists(<img src="1453998840504.png" />):
         wander(steal)
-        Debug.log(<span class="str">"WANDER Done"</span>)
+        Debug.log(<span class="str">"FARM Done"</span>)
+        r.setAutoWaitTimeout(<span class="dig">10</span>)
+        r.<span class="skw">wait</span>(<span class="dig">10</span>)
         r.<span class="skw">click</span>(<img src="1453709602497.png" />)
         r.<span class="skw">click</span>(<img src="1453709618877.png" />)
         r.<span class="skw">wait</span>(<img src="1453709641549.png" />)
@@ -355,11 +356,12 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
+    farm()
     <span class="cmt"># if start():</span>
         <span class="cmt"># farm()</span>
         <span class="cmt"># collect('CENTER')</span>
-    wander(steal)
-        <span class="cmt"># trainTroops()</span>
+    <span class="cmt"># wander(steal)</span>
+
     <span class="cmt"># popup("COC not started! Exit now.")</span>
 
 </pre>
