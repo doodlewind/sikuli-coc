@@ -70,7 +70,9 @@
 <h2>main.sikuli</h2> <a href="main.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
-<span class="cmt"># C Auto Farm Script</span>
+<span class="cmt"># Clash of Clans Auto Farm Script</span>
+<span class="cmt"># Stop script by press command + shift + C</span>
+
 <span class="kw">import</span> time
 <span class="kw">import</span> math
 
@@ -245,6 +247,8 @@
 
 
 <span class="kw">def</span> farm():
+    r.<span class="skw">wait</span>(<img src="1453998706906.png" />)
+    trainTroops(<span class="dig">60</span>)
     r.<span class="skw">click</span>(<img src="1453998706906.png" />)
     r.setAutoWaitTimeout(<span class="dig">5</span>)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453998721964.png" />):
@@ -271,6 +275,7 @@
 <span class="kw">def</span> trainTroops(total):
     r.<span class="skw">click</span>(<img src="1453952569173.png" />)
     trainBar = Pattern(<img src="1453952593719.png" />)
+    r.<span class="skw">wait</span>(trainBar)
     archer = Pattern(<img src="1453952623673.png" />)
     Settings.MoveMouseDelay = <span class="dig">0.01</span>
     perBarack = total / <span class="dig">4</span>
@@ -356,14 +361,12 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    farm()
-    <span class="cmt"># if start():</span>
-        <span class="cmt"># farm()</span>
-        <span class="cmt"># collect('CENTER')</span>
-    <span class="cmt"># wander(steal)</span>
-
-    <span class="cmt"># popup("COC not started! Exit now.")</span>
-
+    <span class="kw">if</span> start():
+        <span class="kw">while</span> True:
+            wander(collect)
+            farm()
+    <span class="kw">else</span>:
+        <span class="skw">popup</span>(<span class="str">"COC not started! Exit now."</span>)
 </pre>
 </body>
 </html>

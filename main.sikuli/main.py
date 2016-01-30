@@ -1,4 +1,6 @@
-# C Auto Farm Script
+# Clash of Clans Auto Farm Script
+# Stop script by press command + shift + C
+
 import time
 import math
 
@@ -173,6 +175,8 @@ def nothing(x):
 
 
 def farm():
+    r.wait("1453998706906.png")
+    trainTroops(60)
     r.click("1453998706906.png")
     r.setAutoWaitTimeout(5)
     if r.wait("1453998721964.png"):
@@ -199,6 +203,7 @@ def farmOnce():
 def trainTroops(total):
     r.click("1453952569173.png")
     trainBar = Pattern("1453952593719.png")
+    r.wait(trainBar)
     archer = Pattern("1453952623673.png")
     Settings.MoveMouseDelay = 0.01
     perBarack = total / 4
@@ -284,11 +289,10 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    farm()
-    # if start():
-        # farm()
-        # collect('CENTER')
-    # wander(steal)
-    
-    # popup("COC not started! Exit now.")
+    if start():
+        while True:
+            wander(collect)
+            farm()
+    else:
+        popup("COC not started! Exit now.")
         
