@@ -122,6 +122,7 @@ def steal(direction):
     targetPoints = elixirPoints + goldPoints
 
     for t in targetPoints:
+        print t
         clickFlag = True
         clickTarget(t, direction)
     # threatPoints = archerTowerPoints + wizardTowerPoints    
@@ -158,6 +159,7 @@ def wander(act):
     end = start.above(280).left(500)
     myDragDrop(start, end)
     act('RIGHT')
+    Debug.log('RIGHT DONE')
 
     # go down
     end = start.above(280).right(500)
@@ -176,28 +178,24 @@ def nothing(x):
 
 def farm():
     r.wait("1453998706906.png")
-    trainTroops(60)
+    # trainTroops(60)
     r.click("1453998706906.png")
     r.setAutoWaitTimeout(5)
     if r.wait("1453998721964.png"):
         r.click("1453998721964.png")
         if r.exists("1453716128302.png"):
-            return False
-        farmOnce()
-
-
-def farmOnce():
-    r.setAutoWaitTimeout(6)
-    if r.exists("1453998840504.png"):
-        wander(steal)
-        Debug.log("FARM Done")
-        r.setAutoWaitTimeout(10)
-        r.wait(10)
-        r.click("1453709602497.png")
-        r.click("1453709618877.png")
-        r.wait("1453709641549.png")
-        r.click("1453709641549.png")
-        Debug.log("RETURN Done")
+            r.click("1454174342067.png")
+            return
+        if r.exists("1453998840504.png"):
+            wander(steal)
+            Debug.log("FARM Done")
+            r.setAutoWaitTimeout(10)
+            r.wait()
+            r.click("1453709602497.png")
+            r.click("1453709618877.png")
+            r.wait("1453709641549.png")
+            r.click("1453709641549.png")
+            Debug.log("RETURN Done")
 
 
 def trainTroops(total):
