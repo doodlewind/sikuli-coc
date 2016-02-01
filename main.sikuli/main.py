@@ -28,15 +28,15 @@ class Finder:
     def findAllGold(self):
         # goldsLv9 = r.findAll("1453953124704.png")
         goldsLv10Lv11 = r.findAll("1453953362202.png")
-        goldsLv12 = r.findAll("1453953394802.png")
-        return f.findBuilding(goldsLv10Lv11, goldsLv12)
+        # goldsLv12 = r.findAll("1453953394802.png")
+        return f.findBuilding(goldsLv10Lv11)
 
     def findAllElixir(self):
         # elixirsLv8Lv9 = r.findAll("1453953091853.png")
         # elixirsLv10 = r.findAll("1453953333748.png")
         elixirsLv11Lv12 = r.findAll("1453953285030.png")
-        darkElixirs = r.findAll("1453996663798.png")
-        return f.findBuilding(elixirsLv11Lv12, darkElixirs)
+        # darkElixirs = r.findAll("1453996663798.png")
+        return f.findBuilding(elixirsLv11Lv12)
     
 
     def findAllArcherTower(self):
@@ -50,135 +50,98 @@ class Finder:
         return f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
-def steal(direction):
-    clickFlag = False
-    
-    def distance(p1, p2):
-        return math.sqrt( math.pow(p2[0] - p1[0], 2) + math.pow(p2[1] - p1[1], 2) )
-
-    def minDistancePoint(point, threats):
-        if len(threats) == 0:
-            return None
-        return min( threats, key=lambda x : distance(x, point) )
-
-    def analyse(point, threats, threshold):
-        minThreat = minDistancePoint(point, threats)
-        if minThreat is None:
-            return Location(r.getX() - 20, r.getY() - 20)
-            
-        if distance(point, minThreat) > threshold:
-            dx = minThreat[0] - point[0]
-            dy = minThreat[1] - point[1]
-            # use length dz to unify the direction
-            dz = math.sqrt(dx*dx + dy*dy)
-            px = max(r.getX(), point[0] - 120 * dx/dz)
-            py = max(r.getY(), point[1] - 120 * dy/dz)
-            return Location(px, py)
-        else:
-            return False
-
-    def clickTarget(target, direction):
-        if direction == 'UP':
-            l = Location(target[0], target[1] - 120)
-        elif direction == 'RIGHT':
-            l = Location(target[0] + 120, target[1])
-        elif direction == 'DOWN':
-            l = Location(target[0], target[1] + 120)
-        else:
-            l = Location(target[0] - 120, target[1])
-        r.doubleClick(l)
-
-    def stealTownHall():
-        clickFlag = False
-        thPoint = f.findTownHall()
-        if thPoint is not None:
-            minX = min(threatPoints, key = lambda x : x[0])
-            maxX = max(threatPoints, key = lambda x : x[0])
-            minY = max(threatPoints, key = lambda x : x[1])
-            maxY = max(threatPoints, key = lambda x : x[1])
-            if (thPoint[0] < minX or thPoint[0] > maxX) and (thPoint[1] < minY or thPoint[1] > maxY):
-                if thPoint[0] < minX:
-                    xOffset = -80
-                else:
-                    xOffset = 80
-                if thPoint[1] < minY:
-                    yOffset = -80
-                else:
-                    yOffset = 80
-                stealPoint = Location(thPoint[0] + xOffset, thPoint[1] + yOffset)
-                clickFlag = True
-                r.click("1453952476599.png")
-                r.click(stealPoint)
-            return clickFlag
-
-    start = time.time()
-    elixirPoints = f.findAllElixir()
-    Debug.log("Time for elixir: " + str(time.time() - start))
-
-    start = time.time()
-    goldPoints = f.findAllGold()
-    Debug.log("Time for gold: " + str(time.time() - start))
-    
-    targetPoints = elixirPoints + goldPoints
-
-    for t in targetPoints:
-        print t
-        clickFlag = True
-        clickTarget(t, direction)
-    # threatPoints = archerTowerPoints + wizardTowerPoints    
-    # for t in targetPoints:
-    #     stealPoint = analyse(t, threatPoints, 165)
-    #     if stealPoint:
-    #         clickFlag = True
-    #         r.click("1453706733808.png")
-    #         r.click(stealPoint)
-    # stealTownHall(threatPoints) 
-    return clickFlag
-
-
-def wander(act):
-    
-    def myDragDrop(start, end):
-        Settings.MoveMouseDelay = 0.1
-        r.dragDrop(start, end)
-    
-    start = r.getCenter()
-    # reset to top left
-    end = start.below(250).right(300)
+def myDragDrop(start, end):
     Settings.MoveMouseDelay = 0.1
-    Settings.DelayBeforeDrop = 0.05
-    Settings.MoveMouseDelay = 0.05
-    myDragDrop(start, end)
+    r.dragDrop(start, end)
+    
 
+def steal():
+    base = r.find("1454335836171.png")
+    r.click(base)
+    return
+
+
+def wanderCollect(): 
+    start = r.getCenter()
     # go top
-    end = start.above(190).left(500)
-    myDragDrop(start, end)
-    act('UP')
+    end = start.below(280)
+    r.dragDrop(start, end)
 
     # go right
-    end = start.above(280).left(500)
-    myDragDrop(start, end)
-    act('RIGHT')
-    Debug.log('RIGHT DONE')
+    end = start.above(280).left(280)
+    r.dragDrop(start, end)
+    collect()
 
     # go down
-    end = start.above(280).right(500)
-    myDragDrop(start, end)
-    act('DOWN')
-
+    end = start.above(280).right(280)
+    r.dragDrop(start, end)
+    collect()
+    
     # go left
-    end = start.below(280).right(500)
-    myDragDrop(start, end)
-    act('LEFT')
+    end = start.below(280).right(280)
+    r.dragDrop(start, end)
+    collect() 
+    Debug.log('collect done')
+
+
+def wanderSteal(): 
+    start = r.getCenter()
+    
+    # go top
+    end = start.below(280)
+    r.dragDrop(start, end)
+    if r.exists("1454337258874.png"):
+        r.click("1454337258874.png")
+        toClick = r.getCenter().above(280)
+        for i in range(5):
+            r.click(toClick.right(80 * i))
+        
+    # go right
+    end = start.above(280).left(280)
+    r.dragDrop(start, end)
+    if r.exists("1454337258874.png"):
+        r.click("1454337258874.png")
+        toClick = r.getCenter().right(330)
+        for i in range(5):
+            r.click(toClick.below(40 * i))
+
+    # go down
+    end = start.above(280).right(280)
+    r.dragDrop(start, end)
+    if r.exists("1454337258874.png"):
+        r.click("1454337258874.png")
+        toClick = r.getCenter().below(220)
+        for i in range(5):
+            r.click(toClick.left(60 * i))
+    
+    # go left
+    end = start.below(280).right(280)
+    r.dragDrop(start, end)
+    if r.exists("1454337258874.png"):
+        r.click("1454337258874.png")
+        toClick = r.getCenter().left(320)
+        for i in range(5):
+            r.click(toClick.below(40 * i))    
     
 
 def nothing(x):
     pass
 
 
+def returnHome():    
+    if r.exists("1454333202149.png"):
+        r.click("1454333202149.png")
+        r.click("1454333227365.png")
+        r.wait("1454333248854.png")
+        r.click("1454333248854.png")
+    elif r.exists("1454333305866.png"):
+        r.click("1454333305866.png")
+    Debug.log("RETURN Done")    
+             
+
 def farm():
     r.wait("1453998706906.png")
-    # trainTroops(60)
+    # trainTroops(30)
     r.click("1453998706906.png")
     r.setAutoWaitTimeout(5)
     if r.wait("1453998721964.png"):
@@ -186,16 +149,9 @@ def farm():
         if r.exists("1453716128302.png"):
             r.click("1454174342067.png")
             return
-        if r.exists("1453998840504.png"):
-            wander(steal)
-            Debug.log("FARM Done")
-            r.setAutoWaitTimeout(10)
-            r.wait()
-            r.click("1453709602497.png")
-            r.click("1453709618877.png")
-            r.wait("1453709641549.png")
-            r.click("1453709641549.png")
-            Debug.log("RETURN Done")
+        if r.wait("1453998840504.png"):
+            # steal('LEFT')
+            returnHome()
 
 
 def trainTroops(total):
@@ -215,7 +171,7 @@ def trainTroops(total):
     r.click("1453952643385.png")
 
 
-def collect(direction):
+def collect():
     clickFlag = False
     r.setAutoWaitTimeout(0.1)
     golds = r.findAll("1453952674225.png")
@@ -235,7 +191,6 @@ def collect(direction):
         clickFlag = True
         for d in darkElixirs:
             r.click(d)
-
     return clickFlag
 
 
@@ -287,10 +242,12 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    if start():
-        while True:
-            wander(collect)
-            farm()
-    else:
-        popup("COC not started! Exit now.")
+    # if start():
+    # while True:
+    # wanderCollect()
+    wanderSteal()
+    returnHome()
+    # farm()
+    # test()
+    # popup("COC not started! Exit now.")
         
