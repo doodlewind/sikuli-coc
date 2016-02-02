@@ -286,17 +286,18 @@
     r.setAutoWaitTimeout(<span class="dig">2</span>)
     <span class="kw">if</span> r.exists(<img src="1453348472944.png" />):
         r.<span class="skw">click</span>(<img src="1453348472944.png" />)
+
+    <span class="kw">if</span> r.exists(<img src="1454345155589.png" />):
+        r.<span class="skw">click</span>(<img src="1454345145879.png" />)
+    <span class="kw">if</span> r.exists(<img src="1453355759177.png" />):
+        r.<span class="skw">click</span>(<img src="1453355776940.png" />)
+    <span class="kw">if</span> r.exists(<img src="1453367221323.png" />):
+        r.<span class="skw">click</span>(<img src="1453367234552.png" />)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453952146233.png" />):
         Debug.log(<span class="str">"COC Started"</span>)
 
         <span class="kw">return</span> True
     <span class="kw">else</span>:
-        <span class="kw">if</span> r.exists(<img src="1454345155589.png" />):
-            r.<span class="skw">click</span>(<img src="1454345145879.png" />)
-        <span class="kw">if</span> r.exists(<img src="1453355759177.png" />):
-            r.<span class="skw">click</span>(<img src="1453355776940.png" />)
-        <span class="kw">if</span> r.exists(<img src="1453367221323.png" />):
-            r.<span class="skw">click</span>(<img src="1453367234552.png" />)
         <span class="kw">return</span> False
 
 
@@ -318,13 +319,12 @@
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    <span class="kw">if</span> start():
-        <span class="kw">while</span> True:
-            wanderCollect()
-            trainTroops(<span class="dig">40</span>)
-            farm()
-    <span class="kw">else</span>:
-        <span class="skw">popup</span>(<span class="str">"COC not started! Exit now."</span>)
+    <span class="kw">while</span> True:
+        start()
+        wanderCollect()
+        <span class="cmt">#trainTroops(30)</span>
+        <span class="cmt">#farm()</span>
+
 </pre>
 </body>
 </html>

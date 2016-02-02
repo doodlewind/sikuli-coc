@@ -214,17 +214,18 @@ def startCOC():
     r.setAutoWaitTimeout(2)
     if r.exists("1453348472944.png"):
         r.click("1453348472944.png")
+
+    if r.exists("1454345155589.png"):
+        r.click("1454345145879.png")
+    if r.exists("1453355759177.png"):
+        r.click("1453355776940.png")
+    if r.exists("1453367221323.png"):
+        r.click("1453367234552.png")
     if r.wait("1453952146233.png"):
         Debug.log("COC Started")
 
-        return True
-    else: 
-        if r.exists("1454345155589.png"):
-            r.click("1454345145879.png")
-        if r.exists("1453355759177.png"):
-            r.click("1453355776940.png")
-        if r.exists("1453367221323.png"):
-            r.click("1453367234552.png")
+        return True 
+    else:
         return False
 
          
@@ -246,11 +247,9 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    if start():
-        while True:
-            wanderCollect()
-            trainTroops(40)
-            farm()
-    else:
-        popup("COC not started! Exit now.")
+    while True:
+        start()
+        wanderCollect()
+        #trainTroops(30)
+        #farm()   
         
