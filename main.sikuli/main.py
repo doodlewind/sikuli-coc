@@ -53,34 +53,32 @@ class Finder:
 def myDragDrop(start, end):
     Settings.MoveMouseDelay = 0.1
     r.dragDrop(start, end)
-    
-
-def steal():
-    base = r.find("1454335836171.png")
-    r.click(base)
-    return
 
 
 def wanderCollect(): 
     start = r.getCenter()
     # go top
-    end = start.below(280)
+    end = start.below(300)
     r.dragDrop(start, end)
+    collect()
 
     # go right
-    end = start.above(280).left(280)
+    end = start.above(300).left(300)
     r.dragDrop(start, end)
     collect()
 
     # go down
-    end = start.above(280).right(280)
+    end = start.above(300).right(300)
     r.dragDrop(start, end)
     collect()
     
     # go left
-    end = start.below(280).right(280)
+    end = start.below(300).right(300)
     r.dragDrop(start, end)
-    collect() 
+    collect()
+
+    if r.exists("1454343020253.png"):
+        r.click("1454343020253.png")
     Debug.log('collect done')
 
 
@@ -93,7 +91,7 @@ def wanderSteal():
     if r.exists("1454337258874.png"):
         r.click("1454337258874.png")
         toClick = r.getCenter().above(280)
-        for i in range(5):
+        for i in range(4):
             r.click(toClick.right(80 * i))
         
     # go right
@@ -101,9 +99,9 @@ def wanderSteal():
     r.dragDrop(start, end)
     if r.exists("1454337258874.png"):
         r.click("1454337258874.png")
-        toClick = r.getCenter().right(330)
+        toClick = r.getCenter().right(400)
         for i in range(5):
-            r.click(toClick.below(40 * i))
+            r.click(toClick.below(60 * i))
 
     # go down
     end = start.above(280).right(280)
@@ -121,7 +119,9 @@ def wanderSteal():
         r.click("1454337258874.png")
         toClick = r.getCenter().left(320)
         for i in range(5):
-            r.click(toClick.below(40 * i))    
+            r.click(toClick.above(60 * i))  
+    
+    r.wait(70)
     
 
 def nothing(x):
@@ -131,6 +131,7 @@ def nothing(x):
 def returnHome():    
     if r.exists("1454333202149.png"):
         r.click("1454333202149.png")
+        r.wait("1454333227365.png")
         r.click("1454333227365.png")
         r.wait("1454333248854.png")
         r.click("1454333248854.png")
@@ -141,17 +142,18 @@ def returnHome():
 
 def farm():
     r.wait("1453998706906.png")
-    # trainTroops(30)
     r.click("1453998706906.png")
-    r.setAutoWaitTimeout(5)
-    if r.wait("1453998721964.png"):
-        r.click("1453998721964.png")
-        if r.exists("1453716128302.png"):
-            r.click("1454174342067.png")
-            return
-        if r.wait("1453998840504.png"):
-            # steal('LEFT')
-            returnHome()
+    r.setAutoWaitTimeout(12)
+    r.wait("1453998721964.png")
+    r.click("1453998721964.png")
+    if r.wait("1453998840504.png"):
+        wanderSteal()
+        returnHome()
+        return True
+        
+    elif r.exists("1453716128302.png"):
+        r.click("1454174342067.png")
+        return False
 
 
 def trainTroops(total):
@@ -217,6 +219,8 @@ def startCOC():
 
         return True
     else: 
+        if r.exists("1454345155589.png"):
+            r.click("1454345145879.png")
         if r.exists("1453355759177.png"):
             r.click("1453355776940.png")
         if r.exists("1453367221323.png"):
@@ -242,12 +246,11 @@ if __name__ == '__main__':
     r.setFindFailedResponse(SKIP)
     f = Finder()
 
-    # if start():
-    # while True:
-    # wanderCollect()
-    wanderSteal()
-    returnHome()
-    # farm()
-    # test()
-    # popup("COC not started! Exit now.")
+    if start():
+        while True:
+            wanderCollect()
+            trainTroops(40)
+            farm()
+    else:
+        popup("COC not started! Exit now.")
         
