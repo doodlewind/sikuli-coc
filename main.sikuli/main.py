@@ -1,8 +1,11 @@
 # Clash of Clans Auto Farm Script
+# Start script on OS X in CLI:
+# $ /Applications/SikuliX.app/run -r /path/to/sikuli-coc/main
 # Stop script by press command + shift + C
 
 import time
 import math
+import random
 
 
 class Finder:        
@@ -14,10 +17,10 @@ class Finder:
             return (townHallLv8.getX(), townHallLv8.getY())
         townHallLv7 = r.find("1453952443462.png")
         if townHallLv7 is not None:
-            return (townHallLv7.getX(), townHallLv7.getY()) 
+            return [townHallLv7.getX(), townHallLv7.getY()] 
         return None
 
-    def findBuilding(self, *args):
+    def locationOf(self, *args):
         results = []
         for building in args:
             if building is not None:
@@ -26,17 +29,23 @@ class Finder:
         return results
 
     def findAllGold(self):
-        # goldsLv9 = r.findAll("1453953124704.png")
         goldsLv10Lv11 = r.findAll("1453953362202.png")
+        if goldsLv10Lv11 is not None:
+            return f.locationOf(goldsLv10Lv11)
+        
+        goldsLv9 = r.findAll("1453953124704.png")
         # goldsLv12 = r.findAll("1453953394802.png")
-        return f.findBuilding(goldsLv10Lv11)
-
+        return f.locationOf(goldsLv9)
+    
     def findAllElixir(self):
-        # elixirsLv8Lv9 = r.findAll("1453953091853.png")
-        # elixirsLv10 = r.findAll("1453953333748.png")
         elixirsLv11Lv12 = r.findAll("1453953285030.png")
+        if elixirsLv11Lv12 is not None:
+            return f.locationOf(elixirsLv11Lv12)
+
+        elixirsLv8Lv9 = r.findAll("1453953091853.png")
+        # elixirsLv10 = r.findAll("1453953333748.png")
         # darkElixirs = r.findAll("1453996663798.png")
-        return f.findBuilding(elixirsLv11Lv12)
+        return f.locationOf(elixirsLv8Lv9)
     
 
     def findAllArcherTower(self):
@@ -50,9 +59,113 @@ class Finder:
         return f.findBuilding(towersLv1Lv2Lv3Lv4Lv5)
 
 
+def steal(direction):
+    
+    def distance(p1, p2):
+        return math.sqrt( math.pow(p2[0] - p1[0], 2) + math.pow(p2[1] - p1[1], 2) )
+
+    def minDistancePoint(point, threats):
+        if len(threats) == 0:
+            return None
+        return min( threats, key=lambda x : distance(x, point) )
+
+    def analyse(point, threats, threshold):
+        minThreat = minDistancePoint(point, threats)
+        if minThreat is None:
+            return Location(r.getX() - 20, r.getY() - 20)
+            
+        if distance(point, minThreat) > threshold:
+            dx = minThreat[0] - point[0]
+            dy = minThreat[1] - point[1]
+            # use length dz to unify the direction
+            dz = math.sqrt(dx*dx + dy*dy)
+            px = max(r.getX(), point[0] - 120 * dx/dz)
+            py = max(r.getY(), point[1] - 120 * dy/dz)
+            return Location(px, py)
+        else:
+            return False
+
+
+    def getSafeClickLocation(x, y, direction):
+        xMin = r.getX() + 20
+        yMin = r.getY() + 20
+        xMax = xMin + r.getW() - 20
+        yMax = yMin + r.getH() - 20
+        
+        if direction == 'UP':
+            y = max(y - 180, yMin)
+        elif direction == 'RIGHT':
+            x = min(x + 180, xMax)
+        elif direction == 'DOWN':
+            y = min(y + 180, yMax)
+        else:
+            x = max(x - 180, xMin)
+        return Location(x, y)
+    
+    def clickTarget(target, direction):
+        for i in range(3):
+            randOff = int(random.random() * 100) - 100
+            l = getSafeClickLocation(target[0] + randOff, target[1] + randOff, direction)
+            r.click(l)
+            
+    clickFlag = False
+    start = time.time()
+    elixirPoints = f.findAllElixir()
+    Debug.log("Time for elixir: " + str(time.time() - start))
+
+    start = time.time()
+    goldPoints = f.findAllGold()
+    Debug.log("Time for gold: " + str(time.time() - start))
+
+    # start = time.time()
+    # thPoint = f.findTownHall()
+    # Debug.log("Time for townhall: " + str(time.time() - start))
+    targetPoints = elixirPoints + goldPoints
+
+    if r.exists("1454337258874.png"):
+        r.click("1454337258874.png")
+    for t in targetPoints:
+        clickFlag = True
+        clickTarget(t, direction)
+        
+    return clickFlag
+
+
 def myDragDrop(start, end):
     Settings.MoveMouseDelay = 0.1
     r.dragDrop(start, end)
+
+
+def wander(act):
+    startTime = time.time()
+    start = r.getCenter()
+    # go top
+    end = start.below(300)
+    r.dragDrop(start, end)
+    act('UP') 
+
+    # go right
+    end = start.above(300).left(300)
+    r.dragDrop(start, end)
+    act('RIGHT')
+
+    # go down
+    end = start.above(300).right(300)
+    r.dragDrop(start, end)
+    act('DOWN')
+    
+    # go left
+    end = start.below(300).right(300)
+    r.dragDrop(start, end)
+    clickFlag = act('LEFT') or clickFlag
+
+    if r.exists("1454343020253.png"):
+        r.click("1454343020253.png")
+    
+    if time.time() - startTime < 60:
+        r.wait(40)
+
+        Debug.log('WANDER done')
 
 
 def wanderCollect(): 
@@ -82,7 +195,7 @@ def wanderCollect():
     Debug.log('collect done')
 
 
-def wanderSteal(): 
+def quickSteal(): 
     start = r.getCenter()
     
     # go top
@@ -120,8 +233,7 @@ def wanderSteal():
         toClick = r.getCenter().left(320)
         for i in range(5):
             r.click(toClick.above(60 * i))  
-    
-    r.wait(70)
+    r.wait(40)
     
 
 def nothing(x):
@@ -141,19 +253,18 @@ def returnHome():
              
 
 def farm():
-    r.wait("1453998706906.png")
-    r.click("1453998706906.png")
+    if r.wait("1453998706906.png"):
+        r.click("1453998706906.png")
+    # differt button
+    elif r.wait("1454378179649.png"):
+        r.click("1454378179649.png")
     r.setAutoWaitTimeout(12)
     r.wait("1453998721964.png")
     r.click("1453998721964.png")
     if r.wait("1453998840504.png"):
-        wanderSteal()
-        returnHome()
-        return True
-        
+        wander(steal)
     elif r.exists("1453716128302.png"):
         r.click("1454174342067.png")
-        return False
 
 
 def trainTroops(total):
@@ -175,7 +286,7 @@ def trainTroops(total):
 
 def collect():
     clickFlag = False
-    r.setAutoWaitTimeout(0.1)
+    r.setAutoWaitTimeout(0.3)
     golds = r.findAll("1453952674225.png")
     if golds:
        clickFlag = True
@@ -196,18 +307,18 @@ def collect():
     return clickFlag
 
 
-def donote():
-    r.click("1453707563632.png")
-    r.setAutoWaitTimeout(0.5)
-    if r.exists("1453707610212.png"):
-        r.click("1453707610212.png")
+def donate():
+    r.click("1454383023512.png")
+    if r.wait("1454380331111.png"):
+        r.click("1454380331111.png")
         for i in range(6):
-            if r.exists("1453707470685.png"):
-                r.click("1453707470685.png")
+            if r.wait("1454380350047.png"):
+                r.click("1454380350047.png")
             else:
                 break
-    r.click("1453707883529.png")
-    r.click("1453707800568.png")
+    if r.exists("1454380371569.png"):
+        r.click("1454380371569.png")
+    r.click("1454380396647.png")
 
 
 def startCOC():
@@ -221,6 +332,9 @@ def startCOC():
         r.click("1453355776940.png")
     if r.exists("1453367221323.png"):
         r.click("1453367234552.png")
+    if r.exists(Pattern("1454380729337.png").exact()):
+        r.click("1454380744610.png")
+        
     if r.wait("1453952146233.png"):
         Debug.log("COC Started")
 
@@ -230,6 +344,7 @@ def startCOC():
 
          
 def start():
+    switchApp("BlueStacks")
     startFlag = False
     startCount = 0
     while not startFlag:
@@ -250,6 +365,8 @@ if __name__ == '__main__':
     while True:
         start()
         wanderCollect()
-        #trainTroops(30)
-        #farm()   
+        trainTroops(30)
+        #donate()
+        farm()
+        returnHome() 
         
