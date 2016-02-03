@@ -157,7 +157,7 @@ def wander(act):
     # go left
     end = start.below(300).right(300)
     r.dragDrop(start, end)
-    clickFlag = act('LEFT') or clickFlag
+    act('LEFT')
 
     if r.exists("1454343020253.png"):
         r.click("1454343020253.png")
@@ -368,5 +368,5 @@ if __name__ == '__main__':
         trainTroops(30)
         #donate()
         farm()
-        returnHome() 
+        returnHome()
         
