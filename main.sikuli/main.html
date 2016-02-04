@@ -229,14 +229,13 @@
     <span class="cmt"># go left</span>
     end = start.below(<span class="dig">300</span>).right(<span class="dig">300</span>)
     r.<span class="skw">dragDrop</span>(start, end)
-    clickFlag = act(<span class="str">'LEFT'</span>) <span class="kw">or</span> clickFlag
+    act(<span class="str">'LEFT'</span>)
 
     <span class="kw">if</span> r.exists(<img src="1454343020253.png" />):
         r.<span class="skw">click</span>(<img src="1454343020253.png" />)
 
     <span class="kw">if</span> time.time() - startTime &lt; <span class="dig">60</span>:
         r.<span class="skw">wait</span>(<span class="dig">40</span>)
-
         Debug.log(<span class="str">'WANDER done'</span>)
 
 
@@ -269,58 +268,76 @@
 
 <span class="kw">def</span> quickSteal():
     start = r.getCenter()
+    mmd = Settings.MoveMouseDelay
+    Settings.MoveMouseDelay = <span class="dig">0.05</span>
 
     <span class="cmt"># go top</span>
-    end = start.below(<span class="dig">280</span>)
+    end = start.below(<span class="dig">300</span>)
     r.<span class="skw">dragDrop</span>(start, end)
-    <span class="kw">if</span> r.exists(<img src="1454337258874.png" />):
-        r.<span class="skw">click</span>(<img src="1454337258874.png" />)
-        toClick = r.getCenter().above(<span class="dig">280</span>)
-        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">4</span>):
-            r.<span class="skw">click</span>(toClick.right(<span class="dig">80</span> * i))
+    <span class="kw">if</span> r.exists(<img src="1454515490708.png" />):
+        r.<span class="skw">click</span>(<img src="1454515490708.png" />)
+        toClick = r.getCenter().above(<span class="dig">250</span>)
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">2</span>):
+            r.<span class="skw">click</span>(toClick.left(<span class="dig">50</span> * i))
+            r.<span class="skw">click</span>(toClick.right(<span class="dig">50</span> * i))
 
     <span class="cmt"># go right</span>
-    end = start.above(<span class="dig">280</span>).left(<span class="dig">280</span>)
+    end = start.above(<span class="dig">310</span>).left(<span class="dig">350</span>)
     r.<span class="skw">dragDrop</span>(start, end)
-    <span class="kw">if</span> r.exists(<img src="1454337258874.png" />):
-        r.<span class="skw">click</span>(<img src="1454337258874.png" />)
+    <span class="kw">if</span> r.exists(<img src="1454515490708.png" />):
+        r.<span class="skw">click</span>(<img src="1454515490708.png" />)
         toClick = r.getCenter().right(<span class="dig">400</span>)
-        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">5</span>):
-            r.<span class="skw">click</span>(toClick.below(<span class="dig">60</span> * i))
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">2</span>):
+            r.<span class="skw">click</span>(toClick.above(<span class="dig">50</span> * i))
+            r.<span class="skw">click</span>(toClick.below(<span class="dig">50</span> * i))
 
     <span class="cmt"># go down</span>
-    end = start.above(<span class="dig">280</span>).right(<span class="dig">280</span>)
+    end = start.above(<span class="dig">310</span>).right(<span class="dig">350</span>)
     r.<span class="skw">dragDrop</span>(start, end)
-    <span class="kw">if</span> r.exists(<img src="1454337258874.png" />):
-        r.<span class="skw">click</span>(<img src="1454337258874.png" />)
-        toClick = r.getCenter().below(<span class="dig">220</span>)
-        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">5</span>):
-            r.<span class="skw">click</span>(toClick.left(<span class="dig">60</span> * i))
+    end = start.above(<span class="dig">310</span>)
+    r.<span class="skw">dragDrop</span>(start, end)
+    <span class="kw">if</span> r.exists(<img src="1454515490708.png" />):
+        r.<span class="skw">click</span>(<img src="1454515490708.png" />)
+        toClick = r.getCenter().below(<span class="dig">120</span>)
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">2</span>):
+            r.<span class="skw">click</span>(toClick.left(<span class="dig">70</span> * i))
+            r.<span class="skw">click</span>(toClick.right(<span class="dig">70</span> * i))
 
     <span class="cmt"># go left</span>
-    end = start.below(<span class="dig">280</span>).right(<span class="dig">280</span>)
+    end = start.below(<span class="dig">320</span>).right(<span class="dig">370</span>)
     r.<span class="skw">dragDrop</span>(start, end)
-    <span class="kw">if</span> r.exists(<img src="1454337258874.png" />):
-        r.<span class="skw">click</span>(<img src="1454337258874.png" />)
-        toClick = r.getCenter().left(<span class="dig">320</span>)
-        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">5</span>):
-            r.<span class="skw">click</span>(toClick.above(<span class="dig">60</span> * i))
-    r.<span class="skw">wait</span>(<span class="dig">40</span>)
+    end = start.below(<span class="dig">310</span>)
+    r.<span class="skw">dragDrop</span>(start, end)
 
+    <span class="kw">if</span> r.exists(<img src="1454515490708.png" />):
+        r.<span class="skw">click</span>(<img src="1454515490708.png" />)
+        toClick = r.getCenter().left(<span class="dig">400</span>)
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">2</span>):
+            r.<span class="skw">click</span>(toClick.above(<span class="dig">70</span> * i))
+            r.<span class="skw">click</span>(toClick.below(<span class="dig">70</span> * i))
+
+    Settings.MoveMouseDelay = mmd
+    <span class="cmt"># wait for goblins</span>
+    r.<span class="skw">wait</span>(<span class="dig">80</span>)
 
 <span class="kw">def</span> nothing(x):
     <span class="kw">pass</span>
 
 
 <span class="kw">def</span> returnHome():
+    <span class="cmt"># items edployed and not win yet</span>
     <span class="kw">if</span> r.exists(<img src="1454333202149.png" />):
         r.<span class="skw">click</span>(<img src="1454333202149.png" />)
-        r.<span class="skw">wait</span>(<img src="1454333227365.png" />)
-        r.<span class="skw">click</span>(<img src="1454333227365.png" />)
-        r.<span class="skw">wait</span>(<img src="1454333248854.png" />)
-        r.<span class="skw">click</span>(<img src="1454333248854.png" />)
+
+    <span class="cmt"># no item deployed, or win</span>
     <span class="kw">elif</span> r.exists(<img src="1454333305866.png" />):
         r.<span class="skw">click</span>(<img src="1454333305866.png" />)
+    r.<span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> r.exists(<img src="1454333227365.png" />):
+        r.<span class="skw">click</span>(<img src="1454333227365.png" />)
+    <span class="kw">if</span> r.exists(<img src="1454333248854.png" />):
+        r.<span class="skw">click</span>(<img src="1454333248854.png" />)
+
     Debug.log(<span class="str">"RETURN Done"</span>)
 
 
@@ -334,7 +351,7 @@
     r.<span class="skw">wait</span>(<img src="1453998721964.png" />)
     r.<span class="skw">click</span>(<img src="1453998721964.png" />)
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453998840504.png" />):
-        wander(steal)
+        quickSteal()
     <span class="kw">elif</span> r.exists(<img src="1453716128302.png" />):
         r.<span class="skw">click</span>(<img src="1454174342067.png" />)
 
@@ -343,8 +360,8 @@
     r.<span class="skw">click</span>(<img src="1453952569173.png" />)
     trainBar = Pattern(<img src="1453952593719.png" />)
     r.<span class="skw">wait</span>(trainBar)
-    archer = Pattern(<img src="1453952623673.png" />)
-    Settings.MoveMouseDelay = <span class="dig">0.01</span>
+    archer = Pattern(<img src="1454515421654.png" />)
+    Settings.MoveMouseDelay = <span class="dig">0.05</span>
     perBarack = total / <span class="dig">4</span>
 
     offsets = [(<span class="dig">140</span>, <span class="dig">225</span>), (<span class="dig">200</span>, <span class="dig">225</span>), (<span class="dig">260</span>, <span class="dig">225</span>), (<span class="dig">320</span>, <span class="dig">225</span>)]
@@ -404,8 +421,8 @@
         r.<span class="skw">click</span>(<img src="1453355776940.png" />)
     <span class="kw">if</span> r.exists(<img src="1453367221323.png" />):
         r.<span class="skw">click</span>(<img src="1453367234552.png" />)
-    <span class="kw">if</span> r.exists(Pattern(<img src="1454380729337.png" />).exact()):
-        r.<span class="skw">click</span>(<img src="1454380744610.png" />)
+    <span class="kw">if</span> r.exists(<img src="1454515076096.png" />):
+        r.<span class="skw">click</span>(<img src="1454515084014.png" />)
 
     <span class="kw">if</span> r.<span class="skw">wait</span>(<img src="1453952146233.png" />):
         Debug.log(<span class="str">"COC Started"</span>)
@@ -437,9 +454,10 @@
     <span class="kw">while</span> True:
         start()
         wanderCollect()
-        trainTroops(<span class="dig">30</span>)
+        trainTroops(<span class="dig">50</span>)
         <span class="cmt">#donate()</span>
         farm()
+        returnHome()
 </pre>
 </body>
 </html>

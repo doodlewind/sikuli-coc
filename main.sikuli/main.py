@@ -164,7 +164,6 @@ def wander(act):
     
     if time.time() - startTime < 60:
         r.wait(40)
-
         Debug.log('WANDER done')
 
 
@@ -197,58 +196,84 @@ def wanderCollect():
 
 def quickSteal(): 
     start = r.getCenter()
+    mmd = Settings.MoveMouseDelay
+    Settings.MoveMouseDelay = 0.05
     
     # go top
-    end = start.below(280)
+    end = start.below(300)
     r.dragDrop(start, end)
-    if r.exists("1454337258874.png"):
-        r.click("1454337258874.png")
-        toClick = r.getCenter().above(280)
-        for i in range(4):
-            r.click(toClick.right(80 * i))
+    if r.exists("1454515490708.png"):
+        r.click("1454515490708.png")
+        toClick = r.getCenter().above(250)
+        for i in range(2):
+            r.click(toClick.left(30 * i)) 
+            r.click(toClick.right(30 * i))
+        for i in range(8):
+            r.click(toClick.below(100).left(200))
         
     # go right
-    end = start.above(280).left(280)
+    end = start.above(310).left(350)
     r.dragDrop(start, end)
-    if r.exists("1454337258874.png"):
-        r.click("1454337258874.png")
+    if r.exists("1454515490708.png"):
+        r.click("1454515490708.png")
         toClick = r.getCenter().right(400)
-        for i in range(5):
-            r.click(toClick.below(60 * i))
+        for i in range(2):
+            r.click(toClick.above(30 * i))
+            r.click(toClick.below(30 * i))
+        for i in range(8):
+            r.click(toClick.below(200))
 
     # go down
-    end = start.above(280).right(280)
+    end = start.above(310).right(350)
     r.dragDrop(start, end)
-    if r.exists("1454337258874.png"):
-        r.click("1454337258874.png")
-        toClick = r.getCenter().below(220)
-        for i in range(5):
-            r.click(toClick.left(60 * i))
-    
+    end = start.above(310)
+    r.dragDrop(start, end)
+    if r.exists("1454515490708.png"):
+        r.click("1454515490708.png")
+        toClick = r.getCenter().below(120)
+        for i in range(2):
+            r.click(toClick.left(40 * i))
+            r.click(toClick.right(40 * i))
+        for i in range(8):
+            r.click(toClick.left(320).above(150))
+
     # go left
-    end = start.below(280).right(280)
+    end = start.below(320).right(370)
     r.dragDrop(start, end)
-    if r.exists("1454337258874.png"):
-        r.click("1454337258874.png")
-        toClick = r.getCenter().left(320)
-        for i in range(5):
-            r.click(toClick.above(60 * i))  
-    r.wait(40)
-    
+    end = start.below(310)
+    r.dragDrop(start, end)
+
+    if r.exists("1454515490708.png"):
+        r.click("1454515490708.png")
+        toClick = r.getCenter().left(400)
+        for i in range(2):
+            r.click(toClick.above(40 * i))
+            r.click(toClick.below(40 * i))
+        for i in range(8):
+            r.click(toClick.above(200))
+
+    Settings.MoveMouseDelay = mmd
+    # wait for goblins
+    r.wait(80)
 
 def nothing(x):
     pass
 
 
-def returnHome():    
+def returnHome():
+    # items edployed and not win yet
     if r.exists("1454333202149.png"):
         r.click("1454333202149.png")
-        r.wait("1454333227365.png")
-        r.click("1454333227365.png")
-        r.wait("1454333248854.png")
-        r.click("1454333248854.png")
+
+    # no item deployed, or win
     elif r.exists("1454333305866.png"):
         r.click("1454333305866.png")
+    r.wait(1)
+    if r.exists("1454333227365.png"):
+        r.click("1454333227365.png")
+    if r.exists("1454333248854.png"):
+        r.click("1454333248854.png")
+        
     Debug.log("RETURN Done")    
              
 
@@ -262,7 +287,17 @@ def farm():
     r.wait("1453998721964.png")
     r.click("1453998721964.png")
     if r.wait("1453998840504.png"):
-        wander(steal)
+        quickSteal()
+        r.wait(60)
+        returnHome()
+        for i in range(10):
+            r.wait(15)
+            start = r.getCenter()
+            end = start.below(30)
+            r.dragDrop(start, end)
+            end = start.above(30)
+            r.dragDrop(start, end)
+            
     elif r.exists("1453716128302.png"):
         r.click("1454174342067.png")
 
@@ -271,8 +306,8 @@ def trainTroops(total):
     r.click("1453952569173.png")
     trainBar = Pattern("1453952593719.png")
     r.wait(trainBar)
-    archer = Pattern("1453952623673.png")
-    Settings.MoveMouseDelay = 0.01
+    archer = Pattern("1454515421654.png")
+    Settings.MoveMouseDelay = 0.05
     perBarack = total / 4
     
     offsets = [(140, 225), (200, 225), (260, 225), (320, 225)]
@@ -332,8 +367,8 @@ def startCOC():
         r.click("1453355776940.png")
     if r.exists("1453367221323.png"):
         r.click("1453367234552.png")
-    if r.exists(Pattern("1454380729337.png").exact()):
-        r.click("1454380744610.png")
+    if r.exists("1454515076096.png"):
+        r.click("1454515084014.png")
         
     if r.wait("1453952146233.png"):
         Debug.log("COC Started")
@@ -365,8 +400,7 @@ if __name__ == '__main__':
     while True:
         start()
         wanderCollect()
-        trainTroops(30)
+        trainTroops(50)
         #donate()
         farm()
-        returnHome()
         
